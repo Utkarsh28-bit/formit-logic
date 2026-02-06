@@ -75,6 +75,14 @@ const Dashboard: React.FC<Props> = ({ profile, onStartWorkout, onCreatePlan, onV
 
   const todaysPlan = plans.find(p => p.day === today) || plans[0];
 
+  // Sort plans: Weekdays first, then Flexible
+  const dayOrder: Record<string, number> = { 'Monday': 1, 'Tuesday': 2, 'Wednesday': 3, 'Thursday': 4, 'Friday': 5, 'Saturday': 6, 'Sunday': 7, 'Flexible': 8 };
+  const sortedPlans = [...plans].sort((a, b) => {
+     const dA = dayOrder[a.day || 'Flexible'] || 9;
+     const dB = dayOrder[b.day || 'Flexible'] || 9;
+     return dA - dB;
+  });
+
   return (
     <div className="p-6 max-w-xl mx-auto space-y-8 pb-20">
       <header className="flex justify-between items-center mb-2">
@@ -245,20 +253,23 @@ const Dashboard: React.FC<Props> = ({ profile, onStartWorkout, onCreatePlan, onV
                <p className="text-slate-500 text-sm">No routines created yet.</p>
              </div>
            )}
-           {plans.map(plan => (
+           {sortedPlans.map(plan => (
              <div 
                key={plan.id}
                onClick={() => onStartWorkout(plan)}
                className="flex items-center justify-between p-4 bg-slate-800 rounded-xl border border-slate-700 hover:border-slate-600 transition-all cursor-pointer active:scale-[0.99] group"
              >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold ${
+                    plan.day === today ? 'bg-emerald-500/20 text-emerald-400 ring-2 ring-emerald-500/50' : 'bg-indigo-500/20 text-indigo-400'
+                  }`}>
                     {plan.name[0]}
                   </div>
                   <div>
                     <h4 className="font-bold text-white text-sm">{plan.name}</h4>
                     <p className="text-xs text-slate-400 flex items-center gap-2">
-                      {plan.day || 'Flexible'} • {plan.exerciseIds.length} Exercises
+                      <span className={`font-bold ${plan.day === today ? 'text-emerald-400' : ''}`}>{plan.day || 'Flexible'}</span> 
+                      • {plan.exerciseIds.length} Exercises
                     </p>
                   </div>
                 </div>
@@ -320,7 +331,18 @@ const Dashboard: React.FC<Props> = ({ profile, onStartWorkout, onCreatePlan, onV
               className="flex items-center gap-4 p-3 bg-slate-800 rounded-xl border border-slate-700 hover:border-slate-600 transition-all cursor-pointer active:scale-[0.98] group"
             >
                <div className="w-12 h-12 bg-slate-700 rounded-lg overflow-hidden shrink-0">
-                 <img src={exercise.gifUrl} alt={exercise.name} className="w-full h-full object-cover" />
+                 {exercise.gifUrl && exercise.gifUrl.endsWith('.mp4') ? (
+                    <video 
+                      src={exercise.gifUrl} 
+                      className="w-full h-full object-cover" 
+                      muted 
+                      loop 
+                      autoPlay 
+                      playsInline 
+                    />
+                 ) : (
+                    <img src={exercise.gifUrl} alt={exercise.name} className="w-full h-full object-cover" />
+                 )}
                </div>
                <div className="flex-1">
                  <h4 className="font-bold text-white text-sm">{exercise.name}</h4>

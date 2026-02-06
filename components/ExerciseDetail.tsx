@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowLeft, History, Trophy, Info, Play, TrendingUp, Calendar } from 'lucide-react';
+import { ArrowLeft, History, Trophy, Info, Play, TrendingUp, Calendar, Youtube, Image as ImageIcon } from 'lucide-react';
 import { EXERCISES } from '../constants';
 import { getHistoryForExercise, getLastLog } from '../services/storageService';
 import { calculateNextTarget } from '../services/workoutLogic';
@@ -25,22 +25,44 @@ const ExerciseDetail: React.FC<Props> = ({ exerciseId, onBack, onStart }) => {
   return (
     <div className="flex flex-col h-full bg-slate-900 text-slate-100 animate-in slide-in-from-right duration-300 min-h-screen">
       {/* Header */}
-      <div className="relative h-64 w-full bg-slate-800 shrink-0">
-        <img 
-          src={exercise.gifUrl} 
-          alt={exercise.name} 
-          className="w-full h-full object-cover opacity-60"
-        />
+      <div className="relative h-64 w-full bg-slate-800 shrink-0 group">
+        {exercise.gifUrl && exercise.gifUrl.endsWith('.mp4') ? (
+          <video 
+            src={exercise.gifUrl} 
+            className="w-full h-full object-cover opacity-60"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        ) : (
+          <img 
+            src={exercise.gifUrl} 
+            alt={exercise.name} 
+            className="w-full h-full object-cover opacity-60"
+          />
+        )}
+        
+        {/* Navigation & Controls */}
         <div className="absolute top-4 left-4 z-10">
           <button onClick={onBack} className="p-2 bg-black/50 backdrop-blur-md rounded-full text-white hover:bg-black/70 transition-colors">
             <ArrowLeft size={20} />
           </button>
         </div>
+
         <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent p-6">
           <h1 className="text-3xl font-bold text-white mb-1">{exercise.name}</h1>
-          <span className="inline-block px-2 py-1 bg-blue-600/20 text-blue-400 text-xs font-bold rounded uppercase">
-            {exercise.muscleGroup}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="inline-block px-2 py-1 bg-blue-600/20 text-blue-400 text-xs font-bold rounded uppercase">
+              {exercise.muscleGroup}
+            </span>
+            {(exercise.videoUrl || exercise.gifUrl) && (
+               <span className="flex items-center gap-1 text-xs font-bold text-white/80">
+                 {exercise.videoUrl ? <Youtube size={14} className="text-red-500" /> : <Play size={14} className="text-emerald-500" />}
+                 {exercise.videoUrl ? 'Tutorial Available' : 'Visual Guide'}
+               </span>
+            )}
+          </div>
         </div>
       </div>
 
@@ -58,6 +80,52 @@ const ExerciseDetail: React.FC<Props> = ({ exerciseId, onBack, onStart }) => {
            </div>
            <p className="text-sm text-slate-400 italic">"{target.reason}"</p>
         </div>
+
+        {/* Video Tutorial Section (Fallback to GIF/Loop if no VideoURL) */}
+        {(exercise.videoUrl || exercise.gifUrl) && (
+          <div className="space-y-3">
+             <h3 className="text-lg font-bold text-white flex items-center gap-2">
+               {exercise.videoUrl ? (
+                 <Youtube size={18} className="text-red-500" />
+               ) : (
+                 <Play size={18} className="text-emerald-500" />
+               )}
+               {exercise.videoUrl ? "Video Tutorial" : "Movement Demo"}
+             </h3>
+             <div className="aspect-video w-full rounded-xl overflow-hidden border border-slate-700 shadow-lg bg-black flex items-center justify-center">
+                {exercise.videoUrl ? (
+                  <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src={exercise.videoUrl} 
+                    title={exercise.name + " Tutorial"}
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowFullScreen
+                  ></iframe>
+                ) : (
+                   <div className="w-full h-full relative">
+                      {exercise.gifUrl.endsWith('.mp4') ? (
+                        <video 
+                          src={exercise.gifUrl} 
+                          className="w-full h-full object-contain" 
+                          autoPlay 
+                          loop 
+                          muted 
+                          playsInline 
+                        />
+                      ) : (
+                        <img 
+                          src={exercise.gifUrl} 
+                          className="w-full h-full object-contain" 
+                          alt={exercise.name + " Demo"} 
+                        />
+                      )}
+                   </div>
+                )}
+             </div>
+          </div>
+        )}
 
         {/* Instructions */}
         <div>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { EXERCISES } from '../constants';
 import { WorkoutPlan } from '../types';
 import { savePlan } from '../services/storageService';
-import { ArrowLeft, Save, Plus, Check } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Check, Calendar } from 'lucide-react';
 
 interface Props {
   onBack: () => void;
@@ -59,16 +59,18 @@ const CreatePlan: React.FC<Props> = ({ onBack, onSave }) => {
         </div>
 
         <div>
-           <label className="block text-sm font-medium text-slate-400 mb-2">Schedule Day</label>
-           <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+           <label className="flex items-center gap-2 text-sm font-medium text-slate-400 mb-2">
+             <Calendar size={16} /> Schedule Day
+           </label>
+           <div className="grid grid-cols-4 gap-2">
               {DAYS.map(d => (
                 <button
                   key={d}
                   onClick={() => setDay(d)}
-                  className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-colors border ${
+                  className={`px-2 py-3 rounded-xl text-xs font-bold transition-all border ${
                     day === d 
-                      ? 'bg-blue-600 border-blue-600 text-white' 
-                      : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'
+                      ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-900/30' 
+                      : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700 hover:border-slate-600'
                   }`}
                 >
                   {d}
@@ -97,7 +99,11 @@ const CreatePlan: React.FC<Props> = ({ onBack, onSave }) => {
                     }`}>
                        {isSelected ? <Check size={14} className="text-white" /> : <Plus size={14} className="text-slate-500" />}
                     </div>
-                    <img src={ex.gifUrl} className="w-12 h-12 rounded-lg object-cover opacity-80 bg-slate-700" alt={ex.name} />
+                    {ex.gifUrl && ex.gifUrl.endsWith('.mp4') ? (
+                       <video src={ex.gifUrl} className="w-12 h-12 rounded-lg object-cover opacity-80 bg-slate-700" muted loop />
+                    ) : (
+                       <img src={ex.gifUrl} className="w-12 h-12 rounded-lg object-cover opacity-80 bg-slate-700" alt={ex.name} />
+                    )}
                     <div>
                       <p className={`font-bold text-sm ${isSelected ? 'text-white' : 'text-slate-300'}`}>{ex.name}</p>
                       <p className="text-xs text-slate-500">{ex.muscleGroup}</p>

@@ -8,6 +8,7 @@ import ImageEditor from './components/ImageEditor';
 import ExerciseDetail from './components/ExerciseDetail';
 import CreatePlan from './components/CreatePlan';
 import EditProfile from './components/EditProfile';
+import WorkoutSummary from './components/WorkoutSummary';
 import { UserProfile, WorkoutPlan, Exercise } from './types';
 import { getProfile, saveProfile } from './services/storageService';
 import { EXERCISES } from './constants';
@@ -21,7 +22,8 @@ enum View {
   IMAGE_EDITOR = 'IMAGE_EDITOR',
   EXERCISE_DETAIL = 'EXERCISE_DETAIL',
   CREATE_PLAN = 'CREATE_PLAN',
-  EDIT_PROFILE = 'EDIT_PROFILE'
+  EDIT_PROFILE = 'EDIT_PROFILE',
+  WORKOUT_SUMMARY = 'WORKOUT_SUMMARY'
 }
 
 const App: React.FC = () => {
@@ -32,6 +34,7 @@ const App: React.FC = () => {
   // Workout State
   const [workoutQueue, setWorkoutQueue] = useState<Exercise[]>([]);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const [sessionStartTime, setSessionStartTime] = useState<number>(0);
 
   // Load profile on startup
   useEffect(() => {
@@ -64,6 +67,7 @@ const App: React.FC = () => {
     if (ex) {
        setWorkoutQueue([ex]);
        setCurrentExerciseIndex(0);
+       setSessionStartTime(Date.now());
        setView(View.WORKOUT);
     }
   };
@@ -84,6 +88,7 @@ const App: React.FC = () => {
       }
     }
     setCurrentExerciseIndex(0);
+    setSessionStartTime(Date.now());
     setView(View.WORKOUT);
   };
 
@@ -137,11 +142,22 @@ const App: React.FC = () => {
                 // Next exercise in queue
                 setCurrentExerciseIndex(prev => prev + 1);
               } else {
-                // Finished queue
-                setView(View.DASHBOARD);
-                setWorkoutQueue([]);
-                setCurrentExerciseIndex(0);
+                // Finished queue, show summary
+                setView(View.WORKOUT_SUMMARY);
+                // We keep the queue for now so the summary might hypothetically access it, but session logs are time-based
               }
+            }} 
+          />
+        );
+
+      case View.WORKOUT_SUMMARY:
+        return (
+          <WorkoutSummary 
+            startTime={sessionStartTime} 
+            onClose={() => {
+              setView(View.DASHBOARD);
+              setWorkoutQueue([]);
+              setCurrentExerciseIndex(0);
             }} 
           />
         );

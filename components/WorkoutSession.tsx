@@ -3,7 +3,7 @@ import { Exercise, ExerciseLog, WorkoutTarget } from '../types';
 import { calculateNextTarget } from '../services/workoutLogic';
 import { getLastLog, saveLog } from '../services/storageService';
 import { generateFormTip } from '../services/geminiService';
-import { Timer, CheckCircle, AlertCircle, TrendingUp, Info, ArrowLeft, MoreHorizontal } from 'lucide-react';
+import { Timer, CheckCircle, AlertCircle, TrendingUp, Info, ArrowLeft, MoreHorizontal, Youtube, X, Play, ChevronDown, ChevronUp, Image as ImageIcon } from 'lucide-react';
 import ExerciseDetail from './ExerciseDetail';
 
 interface Props {
@@ -22,6 +22,7 @@ const WorkoutSession: React.FC<Props> = ({ exercise, onFinish }) => {
   const [isResting, setIsResting] = useState(false);
   const [aiTip, setAiTip] = useState<string | null>(null);
   const [showDetail, setShowDetail] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   // Initialize Target on Mount
   useEffect(() => {
@@ -35,6 +36,10 @@ const WorkoutSession: React.FC<Props> = ({ exercise, onFinish }) => {
       repsPerformed: calculatedTarget.reps,
       rpe: 7
     });
+    
+    // Reset view states when exercise changes
+    setShowVideo(false);
+    setShowDetail(false);
   }, [exercise]);
 
   // Timer Effect
@@ -89,25 +94,48 @@ const WorkoutSession: React.FC<Props> = ({ exercise, onFinish }) => {
   return (
     <div className="flex flex-col h-full bg-slate-900 text-slate-100 max-w-xl mx-auto min-h-screen">
       {/* 1. Header & Visual */}
-      <div className="relative h-64 w-full bg-slate-800 overflow-hidden shrink-0">
-        <img 
-          src={exercise.gifUrl} 
-          alt={exercise.name} 
-          className="w-full h-full object-cover opacity-80"
-        />
-        <div className="absolute top-4 right-4 z-10">
+      <div className="relative h-64 w-full bg-slate-800 overflow-hidden shrink-0 group">
+        {exercise.gifUrl && exercise.gifUrl.endsWith('.mp4') ? (
+          <video 
+            src={exercise.gifUrl} 
+            className="w-full h-full object-cover opacity-80"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        ) : (
+          <img 
+            src={exercise.gifUrl} 
+            alt={exercise.name} 
+            className="w-full h-full object-cover opacity-80"
+          />
+        )}
+        
+        <div className="absolute top-4 right-4 z-10 flex gap-2">
+          {(exercise.videoUrl || exercise.gifUrl) && (
+            <button 
+               onClick={() => setShowVideo(!showVideo)}
+               className={`flex items-center gap-2 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-bold transition-all shadow-lg ${showVideo ? 'bg-red-600 hover:bg-red-700' : 'bg-red-600/80 hover:bg-red-600'}`}
+            >
+              {showVideo ? <ChevronUp size={16} /> : (exercise.videoUrl ? <Play size={16} fill="currentColor" /> : <ImageIcon size={16} />)}
+              {showVideo ? 'Hide' : (exercise.videoUrl ? 'Tutorial' : 'Demo')}
+            </button>
+          )}
           <button 
              onClick={() => setShowDetail(true)}
-             className="flex items-center gap-2 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-bold hover:bg-black/80 transition-all"
+             className="flex items-center gap-2 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-bold hover:bg-black/80 transition-all shadow-lg"
           >
             <Info size={16} /> Details
           </button>
         </div>
+
         <div className="absolute top-4 left-4 z-10">
           <button onClick={onFinish} className="p-2 bg-black/50 backdrop-blur-md rounded-full text-white hover:bg-black/70 transition-colors">
             <ArrowLeft size={20} />
           </button>
         </div>
+
         <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-slate-900 to-transparent p-4">
           <h2 className="text-3xl font-bold text-white">{exercise.name}</h2>
           <p className="text-sm text-slate-300 flex items-center gap-2 truncate pr-4">
@@ -115,6 +143,38 @@ const WorkoutSession: React.FC<Props> = ({ exercise, onFinish }) => {
           </p>
         </div>
       </div>
+
+      {/* Embedded Video/Demo Section */}
+      {showVideo && (
+        <div className="w-full aspect-video bg-black border-b border-slate-700 animate-in slide-in-from-top duration-300">
+           {exercise.videoUrl ? (
+             <iframe 
+               width="100%" 
+               height="100%" 
+               src={exercise.videoUrl + "?autoplay=1"} 
+               title={exercise.name + " Tutorial"}
+               frameBorder="0" 
+               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+               allowFullScreen
+             ></iframe>
+           ) : (
+             <div className="w-full h-full relative flex items-center justify-center">
+                 {exercise.gifUrl && exercise.gifUrl.endsWith('.mp4') ? (
+                    <video 
+                      src={exercise.gifUrl} 
+                      className="w-full h-full object-contain" 
+                      autoPlay 
+                      loop 
+                      muted 
+                      playsInline 
+                    />
+                 ) : (
+                    <img src={exercise.gifUrl} className="w-full h-full object-contain" alt="Demo" />
+                 )}
+             </div>
+           )}
+        </div>
+      )}
 
       {/* 2. The Algorithm's Target */}
       <div className="p-4 flex-1">

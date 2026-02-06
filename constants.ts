@@ -4,8 +4,8 @@ export const EXERCISES: Exercise[] = [
   {
     id: 'squat',
     name: 'Barbell Squat',
-    // Using loremflickr to get an actual squat image or similar
-    gifUrl: 'https://loremflickr.com/400/300/squat,gym/all', 
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-man-doing-squats-at-the-gym-2354-large.mp4', 
+    videoUrl: 'https://www.youtube.com/embed/gcNh17Ckjgg',
     defaultWeight: 60,
     targetReps: 8,
     muscleGroup: 'Legs',
@@ -14,16 +14,69 @@ export const EXERCISES: Exercise[] = [
   {
     id: 'front_squat',
     name: 'Front Squat',
-    gifUrl: 'https://loremflickr.com/400/300/frontsquat,gym/all',
+    // Fallback to Squat video if specific front squat stock footage unavailable, or generic barbell
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-man-training-with-a-barbell-in-a-gym-2359-large.mp4',
+    videoUrl: 'https://www.youtube.com/embed/v-mQMCnQS-M',
     defaultWeight: 40,
     targetReps: 8,
     muscleGroup: 'Legs',
     instructions: 'Rest bar on front delts. Keep elbows high. Squat deep keeping torso upright.'
   },
   {
+    id: 'leg_extension',
+    name: 'Leg Extension',
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-woman-working-out-legs-on-a-machine-2068-large.mp4',
+    videoUrl: 'https://www.youtube.com/embed/YyvSfVjQeL0',
+    defaultWeight: 30,
+    targetReps: 12,
+    muscleGroup: 'Legs',
+    instructions: 'Sit on machine. Extend legs fully. Squeeze quads at top.'
+  },
+  {
+    id: 'leg_curl',
+    name: 'Leg Curl',
+    gifUrl: 'https://loremflickr.com/800/600/gym,machine/all',
+    videoUrl: 'https://www.youtube.com/embed/ELOCsoDSmrg',
+    defaultWeight: 30,
+    targetReps: 12,
+    muscleGroup: 'Legs',
+    instructions: 'Lie face down. Curl heels towards glutes. Control the eccentric.'
+  },
+  {
+    id: 'leg_press',
+    name: 'Leg Press',
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-man-training-legs-on-the-machine-22874-large.mp4',
+    videoUrl: 'https://www.youtube.com/embed/IZxyjW7MPJQ',
+    defaultWeight: 100,
+    targetReps: 10,
+    muscleGroup: 'Legs',
+    instructions: 'Place feet shoulder width. Lower weight until knees are 90 degrees. Push back up.'
+  },
+  {
+    id: 'calf_raise',
+    name: 'Standing Calf Raise',
+    gifUrl: 'https://loremflickr.com/800/600/calves,gym/all',
+    videoUrl: 'https://www.youtube.com/embed/-M4-G8p8fmc',
+    defaultWeight: 40,
+    targetReps: 15,
+    muscleGroup: 'Legs',
+    instructions: 'Stand on edge of step. Lower heels for stretch. Raise up on toes.'
+  },
+  {
+    id: 'sumo_squat',
+    name: 'Sumo Squat',
+    gifUrl: 'https://loremflickr.com/800/600/sumosquat,gym/all',
+    videoUrl: 'https://www.youtube.com/embed/9ZuCXAkDDKg',
+    defaultWeight: 50,
+    targetReps: 10,
+    muscleGroup: 'Legs',
+    instructions: 'Wide stance, toes out. Keep torso upright. Squat deep.'
+  },
+  {
     id: 'bench_press',
     name: 'Bench Press',
-    gifUrl: 'https://loremflickr.com/400/300/benchpress,gym/all',
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-man-working-out-chest-press-on-a-machine-1301-large.mp4',
+    videoUrl: 'https://www.youtube.com/embed/rT7DgCr-3pg',
     defaultWeight: 40,
     targetReps: 10,
     muscleGroup: 'Push',
@@ -32,7 +85,8 @@ export const EXERCISES: Exercise[] = [
   {
     id: 'incline_db_press',
     name: 'Incline DB Press',
-    gifUrl: 'https://loremflickr.com/400/300/dumbbellpress,gym/all',
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-man-training-with-dumbbells-in-a-gym-4767-large.mp4',
+    videoUrl: 'https://www.youtube.com/embed/8iPEnn-ltbc',
     defaultWeight: 20,
     targetReps: 12,
     muscleGroup: 'Push',
@@ -41,7 +95,8 @@ export const EXERCISES: Exercise[] = [
   {
     id: 'tricep_pushdown',
     name: 'Tricep Pushdown',
-    gifUrl: 'https://loremflickr.com/400/300/triceppushdown,gym/all',
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-young-man-doing-triceps-exercises-in-the-gym-2358-large.mp4',
+    videoUrl: 'https://www.youtube.com/embed/6kALZikXxLc',
     defaultWeight: 15,
     targetReps: 12,
     muscleGroup: 'Push',
@@ -50,7 +105,8 @@ export const EXERCISES: Exercise[] = [
   {
     id: 'skull_crusher',
     name: 'Skull Crusher',
-    gifUrl: 'https://loremflickr.com/400/300/skullcrusher,gym/all',
+    gifUrl: 'https://loremflickr.com/800/600/gym,barbell/all',
+    videoUrl: 'https://www.youtube.com/embed/d_KZxkY_0cM',
     defaultWeight: 20,
     targetReps: 10,
     muscleGroup: 'Push',
@@ -59,7 +115,8 @@ export const EXERCISES: Exercise[] = [
   {
     id: 'deadlift',
     name: 'Deadlift',
-    gifUrl: 'https://loremflickr.com/400/300/deadlift,gym/all',
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-athlete-training-deadlift-at-the-gym-42171-large.mp4',
+    videoUrl: 'https://www.youtube.com/embed/op9kVnSso6Q',
     defaultWeight: 80,
     targetReps: 5,
     muscleGroup: 'Pull',
@@ -68,7 +125,8 @@ export const EXERCISES: Exercise[] = [
   {
     id: 'rdl',
     name: 'Romanian Deadlift',
-    gifUrl: 'https://loremflickr.com/400/300/deadlift,hamstrings/all',
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-man-training-with-a-barbell-in-a-gym-2359-large.mp4',
+    videoUrl: 'https://www.youtube.com/embed/jcjfUXWmAp4',
     defaultWeight: 60,
     targetReps: 10,
     muscleGroup: 'Pull',
@@ -77,7 +135,8 @@ export const EXERCISES: Exercise[] = [
   {
     id: 'bicep_curl',
     name: 'Barbell Bicep Curl',
-    gifUrl: 'https://loremflickr.com/400/300/bicepcurl,gym/all',
+    gifUrl: 'https://assets.mixkit.co/videos/preview/mixkit-man-exercising-with-dumbbells-in-a-gym-4762-large.mp4',
+    videoUrl: 'https://www.youtube.com/embed/kwG2ipFRgfo',
     defaultWeight: 20,
     targetReps: 12,
     muscleGroup: 'Pull',
@@ -86,7 +145,8 @@ export const EXERCISES: Exercise[] = [
   {
     id: 'hammer_curl',
     name: 'Dumbbell Hammer Curl',
-    gifUrl: 'https://loremflickr.com/400/300/hammercurl,gym/all',
+    gifUrl: 'https://loremflickr.com/800/600/biceps,dumbbell/all',
+    videoUrl: 'https://www.youtube.com/embed/zC3nLlEvin4',
     defaultWeight: 10,
     targetReps: 12,
     muscleGroup: 'Pull',

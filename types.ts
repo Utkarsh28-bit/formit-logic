@@ -1,3 +1,4 @@
+
 export enum DietType {
   VEG = 'Vegetarian',
   VEGAN = 'Vegan',
@@ -42,6 +43,7 @@ export interface Exercise {
   id: string;
   name: string;
   gifUrl: string;
+  videoUrl?: string; // YouTube Embed URL
   defaultWeight: number;
   targetReps: number;
   muscleGroup: 'Push' | 'Pull' | 'Legs';
