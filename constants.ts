@@ -39,6 +39,24 @@ export const EXERCISES: Exercise[] = [
     instructions: 'Set bench to 30 degrees. Press weights up converging slightly at top. Control descent.'
   },
   {
+    id: 'tricep_pushdown',
+    name: 'Tricep Pushdown',
+    gifUrl: 'https://loremflickr.com/400/300/triceppushdown,gym/all',
+    defaultWeight: 15,
+    targetReps: 12,
+    muscleGroup: 'Push',
+    instructions: 'Keep elbows tucked at sides. Extend arms fully downwards. Control the return.'
+  },
+  {
+    id: 'skull_crusher',
+    name: 'Skull Crusher',
+    gifUrl: 'https://loremflickr.com/400/300/skullcrusher,gym/all',
+    defaultWeight: 20,
+    targetReps: 10,
+    muscleGroup: 'Push',
+    instructions: 'Lie on bench. Lower bar to forehead by bending elbows. Extend back up.'
+  },
+  {
     id: 'deadlift',
     name: 'Deadlift',
     gifUrl: 'https://loremflickr.com/400/300/deadlift,gym/all',
@@ -55,6 +73,24 @@ export const EXERCISES: Exercise[] = [
     targetReps: 10,
     muscleGroup: 'Pull',
     instructions: 'Hinge primarily at hips with slight knee bend. Lower until hamstring stretch.'
+  },
+  {
+    id: 'bicep_curl',
+    name: 'Barbell Bicep Curl',
+    gifUrl: 'https://loremflickr.com/400/300/bicepcurl,gym/all',
+    defaultWeight: 20,
+    targetReps: 12,
+    muscleGroup: 'Pull',
+    instructions: 'Keep elbows fixed at sides. Curl bar up towards chest. Squeeze biceps at top.'
+  },
+  {
+    id: 'hammer_curl',
+    name: 'Dumbbell Hammer Curl',
+    gifUrl: 'https://loremflickr.com/400/300/hammercurl,gym/all',
+    defaultWeight: 10,
+    targetReps: 12,
+    muscleGroup: 'Pull',
+    instructions: 'Hold dumbbells with neutral grip. Curl up keeping palms facing each other.'
   }
 ];
 

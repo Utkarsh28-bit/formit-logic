@@ -7,6 +7,7 @@ import DietPlan from './components/DietPlan';
 import ImageEditor from './components/ImageEditor';
 import ExerciseDetail from './components/ExerciseDetail';
 import CreatePlan from './components/CreatePlan';
+import EditProfile from './components/EditProfile';
 import { UserProfile, WorkoutPlan, Exercise } from './types';
 import { getProfile, saveProfile } from './services/storageService';
 import { EXERCISES } from './constants';
@@ -19,7 +20,8 @@ enum View {
   DIET = 'DIET',
   IMAGE_EDITOR = 'IMAGE_EDITOR',
   EXERCISE_DETAIL = 'EXERCISE_DETAIL',
-  CREATE_PLAN = 'CREATE_PLAN'
+  CREATE_PLAN = 'CREATE_PLAN',
+  EDIT_PROFILE = 'EDIT_PROFILE'
 }
 
 const App: React.FC = () => {
@@ -43,6 +45,12 @@ const App: React.FC = () => {
   const handleOnboardingComplete = (newProfile: UserProfile) => {
     saveProfile(newProfile);
     setProfile(newProfile);
+    setView(View.DASHBOARD);
+  };
+
+  const handleProfileUpdate = (updatedProfile: UserProfile) => {
+    saveProfile(updatedProfile);
+    setProfile(updatedProfile);
     setView(View.DASHBOARD);
   };
 
@@ -95,6 +103,17 @@ const App: React.FC = () => {
             onDietPlan={() => setView(View.DIET)}
             onImageEditor={() => setView(View.IMAGE_EDITOR)}
             onViewExercise={handleViewExercise}
+            onEditProfile={() => setView(View.EDIT_PROFILE)}
+          />
+        );
+
+      case View.EDIT_PROFILE:
+        if (!profile) return null;
+        return (
+          <EditProfile 
+            currentProfile={profile} 
+            onSave={handleProfileUpdate} 
+            onCancel={() => setView(View.DASHBOARD)} 
           />
         );
 
